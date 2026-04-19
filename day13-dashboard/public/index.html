@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">AI Tools</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-tab="tone">
+        <span class="nav-index">01</span>
+        <span class="nav-label">Tone Rewriter</span>
+      </button>
+      <button class="nav-btn" data-tab="email">
+        <span class="nav-index">02</span>
+        <span class="nav-label">Email Drafter</span>
+      </button>
+      <button class="nav-btn" data-tab="brief">
+        <span class="nav-index">03</span>
+        <span class="nav-label">Copy Brief</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">Powered by Claude</div>
+  </aside>
+
+  <main class="content">
+
+    <!-- 01 — Tone Rewriter -->
+    <section id="tab-tone" class="tab active">
+      <header class="section-header">
+        <p class="eyebrow">Writing Tool — 01</p>
+        <h1>Tone Rewriter</h1>
+        <p class="section-sub">Paste any text. Choose a voice. Instantly rewritten.</p>
+      </header>
+      <div class="section-body">
+        <div class="form-card">
+          <div class="form-group">
+            <label>Your text</label>
+            <textarea id="tone-text" rows="6" placeholder="Paste your text here…"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Tone</label>
+            <div class="slider-group" id="tone-slider">
+              <div class="slider-track">
+                <div class="slider-indicator"></div>
+                <button class="slider-opt active" data-value="professional"><span class="opt-label">Professional</span></button>
+                <button class="slider-opt" data-value="casual"><span class="opt-label">Casual</span></button>
+                <button class="slider-opt" data-value="punchy"><span class="opt-label">Punchy</span></button>
+              </div>
+              <div class="slider-desc">Clear, structured &amp; authoritative</div>
+            </div>
+          </div>
+          <button class="btn" onclick="generateTone()">Generate</button>
+        </div>
+        <div id="tone-result" class="result hidden">
+          <div class="result-header">
+            <span class="result-label">Output</span>
+            <button class="result-copy" onclick="copyResult('tone-result')">Copy</button>
+          </div>
+          <div class="result-body"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 — Email Drafter -->
+    <section id="tab-email" class="tab">
+      <header class="section-header">
+        <p class="eyebrow">Writing Tool — 02</p>
+        <h1>Email Drafter</h1>
+        <p class="section-sub">Brief the situation. Get a polished email, ready to send.</p>
+      </header>
+      <div class="section-body">
+        <div class="form-card">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Recipient</label>
+              <input type="text" id="email-recipient" placeholder="Name &amp; role" />
+            </div>
+            <div class="form-group">
+              <label>Goal</label>
+              <input type="text" id="email-goal" placeholder="e.g. propose a meeting" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Situation &amp; context</label>
+            <textarea id="email-situation" rows="3" placeholder="Describe the background…"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Tone</label>
+            <div class="slider-group" id="email-slider">
+              <div class="slider-track">
+                <div class="slider-indicator"></div>
+                <button class="slider-opt active" data-value="formal"><span class="opt-label">Formal</span></button>
+                <button class="slider-opt" data-value="friendly-professional"><span class="opt-label">Friendly Pro</span></button>
+                <button class="slider-opt" data-value="warm"><span class="opt-label">Warm</span></button>
+              </div>
+              <div class="slider-desc">Structured and respectful</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Specific details <span class="label-optional">Optional</span></label>
+            <input type="text" id="email-details" placeholder="Key points to include…" />
+          </div>
+          <button class="btn" onclick="generateEmail()">Generate</button>
+        </div>
+        <div id="email-result" class="result hidden">
+          <div class="result-header">
+            <span class="result-label">Output</span>
+            <button class="result-copy" onclick="copyResult('email-result')">Copy</button>
+          </div>
+          <div class="result-body"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 — Copy Brief -->
+    <section id="tab-brief" class="tab">
+      <header class="section-header">
+        <p class="eyebrow">Writing Tool — 03</p>
+        <h1>Copy Brief</h1>
+        <p class="section-sub">Describe the product. Get a complete copywriting brief.</p>
+      </header>
+      <div class="section-body">
+        <div class="form-card">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Product / Service</label>
+              <input type="text" id="brief-product" placeholder="e.g. SaaS project management tool" />
+            </div>
+            <div class="form-group">
+              <label>Target audience</label>
+              <input type="text" id="brief-audience" placeholder="e.g. freelance designers" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Unique selling point</label>
+            <textarea id="brief-usp" rows="2" placeholder="What makes this stand out?"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group brief-tone-group">
+              <label>Tone</label>
+              <div class="slider-group" id="brief-slider">
+                <div class="slider-track">
+                  <div class="slider-indicator"></div>
+                  <button class="slider-opt active" data-value="professional"><span class="opt-label">Professional</span></button>
+                  <button class="slider-opt" data-value="conversational"><span class="opt-label">Conversational</span></button>
+                  <button class="slider-opt" data-value="bold and direct"><span class="opt-label">Bold &amp; Direct</span></button>
+                  <button class="slider-opt" data-value="warm and friendly"><span class="opt-label">Warm &amp; Friendly</span></button>
+                </div>
+                <div class="slider-desc">Polished, credible &amp; trustworthy</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Call to action</label>
+              <input type="text" id="brief-cta" placeholder="e.g. Start your free trial" />
+            </div>
+          </div>
+          <button class="btn" onclick="generateBrief()">Generate</button>
+        </div>
+        <div id="brief-result" class="result hidden">
+          <div class="result-header">
+            <span class="result-label">Output</span>
+            <button class="result-copy" onclick="copyResult('brief-result')">Copy</button>
+          </div>
+          <div class="result-body"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
