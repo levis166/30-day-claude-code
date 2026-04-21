@@ -1,0 +1,19 @@
+{
+  "name": "day23-moodboard-scraper",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "moodboard.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
+    "axios": "^1.15.1",
+    "cheerio": "^1.2.0"
+  },
+  "devDependencies": {},
+  "description": ""
+}
