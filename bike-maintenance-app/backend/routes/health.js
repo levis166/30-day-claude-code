@@ -14,7 +14,11 @@ router.get('/bike/:bikeId', (req, res) => {
       WHERE bike_id = ? AND date >= ?
     `).get(bikeId, c.install_date || '2000-01-01').km;
 
-    const threshold = c.replace_at_km || c.service_at_km;
+    // Use the more conservative (lower) of replace/service thresholds so dual-interval
+    // components like Bottom Bracket warn at the service interval, not the replace interval.
+    const candidates = [c.replace_at_km, c.service_at_km].filter(v => v != null);
+    const threshold = candidates.length > 0 ? Math.min(...candidates) : null;
+
     const pct = threshold ? Math.min((kmSinceInstall / threshold) * 100, 100) : null;
 
     let status = 'ok';

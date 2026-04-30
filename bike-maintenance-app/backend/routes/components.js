@@ -26,16 +26,18 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   const { name, type, brand, installed_km, install_date, replace_at_km, service_at_km, notes } = req.body;
+  // Use COALESCE only for required fields (name, type). Use direct assignment for nullable
+  // fields so the user can clear thresholds by setting them to null in the edit modal.
   db.prepare(`
     UPDATE components SET
-      name = COALESCE(?, name),
-      type = COALESCE(?, type),
-      brand = COALESCE(?, brand),
+      name         = COALESCE(?, name),
+      type         = COALESCE(?, type),
+      brand        = ?,
       installed_km = COALESCE(?, installed_km),
       install_date = COALESCE(?, install_date),
-      replace_at_km = COALESCE(?, replace_at_km),
-      service_at_km = COALESCE(?, service_at_km),
-      notes = COALESCE(?, notes)
+      replace_at_km = ?,
+      service_at_km = ?,
+      notes        = ?
     WHERE id = ?
   `).run(name, type, brand, installed_km, install_date, replace_at_km, service_at_km, notes, req.params.id);
   res.json(db.prepare('SELECT * FROM components WHERE id = ?').get(req.params.id));
